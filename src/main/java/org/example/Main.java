@@ -24,5 +24,25 @@ public class Main {
         System.out.println("Größe nach pop: " + stack.size()); // Ausgabe: 2
 
         System.out.println("Neues oberstes Element (peek): " + stack.peek()); // Ausgabe: Element 2 (mitte)
+
+        // Entfernen der restlichen Elemente
+        System.out.println("Entfernt (pop): " + stack.pop()); // Ausgabe: Element 2 (mitte)
+        System.out.println("Entfernt (pop): " + stack.pop()); // Ausgabe: Element 1 (unten)
+
+        System.out.println("Größe am Ende: " + stack.size()); // Ausgabe: 0
+
+        // 4. pop() auf leerem Stack
+        try {
+            stack.pop();
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("IndexOutOfBoundsException gefangen: " + e.getMessage()); // Ausgabe: Der Stack ist leer.
+        }
+
+        // 5. peek() auf leerem Stack
+        try {
+            stack.peek();
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("IndexOutOfBoundsException gefangen: " + e.getMessage()); // Ausgabe: Der Stack ist leer.
+        }
     }
 }
