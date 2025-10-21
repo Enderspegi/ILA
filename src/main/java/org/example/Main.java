@@ -12,5 +12,8 @@ public class Main {
         stack.push("Element 2 (mitte)");
         stack.push("Element 3 (oben)");
 
+        System.out.println("Größe nach push: " + stack.size()); // Ausgabe: 3
+        System.out.println("Ist der Stack leer? " + stack.isEmpty()); // Ausgabe: false
+
     }
 }
