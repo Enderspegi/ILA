@@ -1,46 +1,52 @@
 /**
- * Die Klasse {@code Token} repräsentiert ein einzelnes Token (z. B. Zahl, Operator, Klammer)
- * in einem mathematischen Ausdruck oder einer ähnlichen Zeichenkette.
- * <p>
- * Ein Token besteht aus einem Typ (z. B. {@link Type#NUMBER}) und dem zugehörigen Wert
- * (z. B. "42" oder "+").
- * </p>
+ * Die Klasse {@code Token} repräsentiert ein einzelnes Token (ein "Wort")
+ * innerhalb eines mathematischen Ausdrucks, z. B. eine Zahl, einen Operator
+ * oder eine Klammer.
  *
- * Beispiel:
- * <pre>
- * Token t = new Token(Token.Type.NUMBER, "5");
- * System.out.println(t.getType());  // Ausgabe: NUMBER
- * System.out.println(t.getValue()); // Ausgabe: 5
- * </pre>
- *
- * @author
- * @version 1.0
+ * <p>Ein Beispielausdruck wie {@code (3 + -5) * 2} würde in folgende Tokens zerlegt:</p>
+ * <ul>
+ *   <li>{@code (} → LPAREN</li>
+ *   <li>{@code 3} → NUMBER</li>
+ *   <li>{@code +} → OPERATOR</li>
+ *   <li>{@code -5} → NUMBER (mit Vorzeichen)</li>
+ *   <li>{@code )} → RPAREN</li>
+ *   <li>{@code *} → OPERATOR</li>
+ *   <li>{@code 2} → NUMBER</li>
+ * </ul>
  */
 public class Token {
 
     /**
-     * Der Typ eines Tokens.
-     * <ul>
-     *     <li>{@link #NUMBER} – eine Zahl (z. B. "42")</li>
-     *     <li>{@link #OPERATOR} – ein Operator (z. B. "+", "-", "*", "/")</li>
-     *     <li>{@link #LPAREN} – eine linke Klammer "("</li>
-     *     <li>{@link #RPAREN} – eine rechte Klammer ")"</li>
-     *     <li>{@link #UNKNOWN} – ein unbekanntes oder ungültiges Token</li>
-     * </ul>
+     * Typen von Tokens, die im Ausdruck vorkommen können.
      */
-    public enum Type { NUMBER, OPERATOR, LPAREN, RPAREN, UNKNOWN }
+    public enum Type {
+        /** Eine Zahl (z. B. 42, -5, 3.14) */
+        NUMBER,
 
-    /** Der Typ dieses Tokens (z. B. NUMBER, OPERATOR etc.) */
+        /** Ein Operator (z. B. +, -, *, /, ^) */
+        OPERATOR,
+
+        /** Linke Klammer '(' */
+        LPAREN,
+
+        /** Rechte Klammer ')' */
+        RPAREN,
+
+        /** Unbekanntes oder ungültiges Token */
+        UNKNOWN
+    }
+
+    /** Der Typ des Tokens */
     private final Type type;
 
-    /** Der eigentliche Textwert des Tokens (z. B. "3", "+", "(") */
+    /** Der Textwert des Tokens (z. B. "42" oder "+") */
     private final String value;
 
     /**
-     * Erstellt ein neues Token mit dem angegebenen Typ und Wert.
+     * Erstellt ein neues {@code Token}-Objekt mit Typ und Textwert.
      *
-     * @param type  der Typ des Tokens (z. B. {@link Type#NUMBER})
-     * @param value der Zeichenwert des Tokens (z. B. "5", "+", "(")
+     * @param type  der Typ des Tokens (z. B. NUMBER oder OPERATOR)
+     * @param value der Zeichenkettenwert des Tokens
      */
     public Token(Type type, String value) {
         this.type = type;
@@ -50,31 +56,40 @@ public class Token {
     /**
      * Gibt den Typ dieses Tokens zurück.
      *
-     * @return der {@link Type} dieses Tokens
+     * @return der Typ des Tokens
      */
     public Type getType() {
         return type;
     }
 
     /**
-     * Gibt den Wert dieses Tokens zurück.
+     * Gibt den Zeichenkettenwert dieses Tokens zurück.
      *
-     * @return der Wert (String) dieses Tokens
+     * @return der Wert des Tokens
      */
     public String getValue() {
         return value;
     }
 
     /**
-     * Gibt den Wert dieses Tokens als String zurück.
-     * <p>
-     * Diese Methode ist hilfreich für Debugging und einfache Ausgaben.
-     * </p>
+     * Gibt den Textwert des Tokens zurück, um eine einfache Ausgabe
+     * bei der Tokenliste zu ermöglichen.
      *
-     * @return der Textwert des Tokens
+     * @return der Zeichenkettenwert des Tokens
      */
     @Override
     public String toString() {
         return value;
     }
+
+    /**
+     * Prüft, ob dieses Token eine negative Zahl mit Vorzeichen ist.
+     *
+     * @return {@code true}, wenn das Token eine Zahl ist, die mit '-' beginnt;
+     *         sonst {@code false}
+     */
+    public boolean isSignedNegativeNumber() {
+        return type == Type.NUMBER && value.startsWith("-");
+    }
 }
+
