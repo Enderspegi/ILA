@@ -47,7 +47,7 @@ public class ShuntingYard {
     }
 
     /**
-     * Konvertiert eine Liste von Tokens (Infix-Notation) in RPN (Postfix-Notation).
+     *
      *
      * <p>Verwendet einen Stack für Operatoren und die Shunting-Yard-Regeln:
      * <ul>
