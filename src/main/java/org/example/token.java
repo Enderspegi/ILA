@@ -1,3 +1,6 @@
+package org.example;
+
+
 /**
  * Die Klasse {@code Token} repräsentiert ein einzelnes Token (ein "Wort")
  * innerhalb eines mathematischen Ausdrucks, z. B. eine Zahl, einen Operator
@@ -36,11 +39,9 @@ public class Token {
         UNKNOWN
     }
 
-    /** Der Typ des Tokens */
-    private final Type type;
+    private Type type = null;
 
-    /** Der Textwert des Tokens (z. B. "42" oder "+") */
-    private final String value;
+    private String value = "";
 
     /**
      * Erstellt ein neues {@code Token}-Objekt mit Typ und Textwert.
