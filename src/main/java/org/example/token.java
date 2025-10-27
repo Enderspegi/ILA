@@ -30,10 +30,14 @@ public class Token {
         OPERATOR,
 
         /** Linke Klammer '(' */
-        LPAREN,
+        LPARENNORMAL,
 
         /** Rechte Klammer ')' */
-        RPAREN,
+        RPARENNORMAL,
+
+        LPARENECKIG,
+
+        RPARENECKIG,
 
         /** Unbekanntes oder ungültiges Token */
         UNKNOWN
