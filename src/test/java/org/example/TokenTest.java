@@ -14,7 +14,8 @@ public class TokenTest {
     // -------------------------------------------------------------------------
 
     /**
-     * Testet die korrekte Zuweisung und Rückgabe von Typ und Wert eines NUMBER-Tokens.
+     * Testet die korrekte Zuweisung und Rückgabe von Typ und Wert eines
+     * NUMBER-Tokens.
      */
     @Test
     void testTokenInitialization_Number() {
@@ -33,17 +34,36 @@ public class TokenTest {
         assertEquals(Token.Type.OPERATOR, token.getType(), "Der Token-Typ sollte OPERATOR sein.");
         assertEquals("*", token.getValue(), "Der Token-Wert sollte '*' sein.");
     }
-    
+
+    /**
+     * Testet die korrekte Zuweisung und Rückgabe eines OPERATOR-Tokens.
+     */
+    @Test
+    void testTokenInitialization_Operator2() {
+        Token token = new Token(Token.Type.OPERATOR, "^");
+        assertEquals(Token.Type.OPERATOR, token.getType(), "Der Token-Typ sollte OPERATOR sein.");
+        assertEquals("*", token.getValue(), "Der Token-Wert sollte '*' sein.");
+    }
     /**
      * Testet die korrekte Zuweisung und Rückgabe eines Klammer-Tokens.
      */
     @Test
     void testTokenInitialization_Parenthesis() {
         Token token = new Token(Token.Type.LPARENNORMAL, "(");
-        assertEquals(Token.Type.LPARENNORMAL, token.getType(), "Der Token-Typ sollte LPAREN sein.");
+        assertEquals(Token.Type.LPARENNORMAL, token.getType(), "Der Token-Typ sollte LPARENNORMAL sein.");
         assertEquals("(", token.getValue(), "Der Token-Wert sollte '(' sein.");
     }
-    
+
+    /**
+     * Testet die korrekte Zuweisung und Rückgabe eines Klammer-Tokens.
+     */
+    @Test
+    void testTokenInitialization_Parenthesis2() {
+        Token token = new Token(Token.Type.LPARENNORMAL, "[");
+        assertEquals(Token.Type.LPARENECKIG, token.getType(), "Der Token-Typ sollte LPARENECKIG sein.");
+        assertEquals("[", token.getValue(), "Der Token-Wert sollte '[' sein.");
+    }
+
     /**
      * Testet die korrekte Zuweisung und Rückgabe eines UNKNOWN-Tokens.
      */
@@ -53,7 +73,7 @@ public class TokenTest {
         assertEquals(Token.Type.UNKNOWN, token.getType(), "Der Token-Typ sollte UNKNOWN sein.");
         assertEquals("$", token.getValue(), "Der Token-Wert sollte '$' sein.");
     }
-    
+
     // -------------------------------------------------------------------------
     // 2. Tests für isSignedNegativeNumber()
     // -------------------------------------------------------------------------
@@ -66,7 +86,7 @@ public class TokenTest {
         Token token = new Token(Token.Type.NUMBER, "-10");
         assertTrue(token.isSignedNegativeNumber(), "Sollte TRUE für '-10' zurückgeben.");
     }
-    
+
     /**
      * Testet die Methode für eine negative Gleitkommazahl.
      */
@@ -93,7 +113,7 @@ public class TokenTest {
         Token token = new Token(Token.Type.OPERATOR, "-"); // Subtraktionsoperator
         assertFalse(token.isSignedNegativeNumber(), "Sollte FALSE für den Subtraktionsoperator '-' zurückgeben.");
     }
-    
+
     /**
      * Testet die Methode für einen OPERATOR (positiv).
      */
