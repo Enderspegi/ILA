@@ -24,6 +24,7 @@ public class ShuntingYard {
         PRECEDENCE.put("-", 1);
         PRECEDENCE.put("*", 2);
         PRECEDENCE.put("/", 2);
+        PRECEDENCE.put("^", 3);
     }
 
     /**
