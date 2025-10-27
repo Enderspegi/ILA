@@ -1,6 +1,5 @@
 package org.example;
 
-
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -8,11 +7,13 @@ import java.util.HashMap;
 
 /**
  * Implementiert den Shunting-Yard-Algorithmus von Edsger Dijkstra,
- * um einen infix-mathematischen Ausdruck in Reverse Polish Notation (RPN) zu konvertieren.
+ * um einen infix-mathematischen Ausdruck in Reverse Polish Notation (RPN) zu
+ * konvertieren.
  *
- * <p>Beispiel:
- * Infix:  "3 + 4 * 2 / (1 - 5)"
- * RPN:    "3 4 2 * 1 5 - / +"
+ * <p>
+ * Beispiel:
+ * Infix: "3 + 4 * 2 / (1 - 5)"
+ * RPN: "3 4 2 * 1 5 - / +"
  * </p>
  */
 public class ShuntingYard {
@@ -40,7 +41,10 @@ public class ShuntingYard {
     /**
      * Prüft, ob ein Operator linksassoziativ ist.
      *
-     * <p>In diesem Beispiel sind alle unterstützten Operatoren (+, -, *, /) linksassoziativ.</p>
+     * <p>
+     * In diesem Beispiel sind alle unterstützten Operatoren (+, -, *, /)
+     * linksassoziativ.
+     * </p>
      *
      * @param operator der Operator
      * @return true, wenn linksassoziativ
@@ -52,11 +56,13 @@ public class ShuntingYard {
     /**
      *
      *
-     * <p>Verwendet einen Stack für Operatoren und die Shunting-Yard-Regeln:
+     * <p>
+     * Verwendet einen Stack für Operatoren und die Shunting-Yard-Regeln:
      * <ul>
-     *   <li>Zahlen → direkt in die Ausgabe</li>
-     *   <li>Operatoren → abhängig von Priorität und Assoziativität auf Stack oder in Ausgabe</li>
-     *   <li>Klammern → verwalten geschachtelte Ausdrücke</li>
+     * <li>Zahlen → direkt in die Ausgabe</li>
+     * <li>Operatoren → abhängig von Priorität und Assoziativität auf Stack oder in
+     * Ausgabe</li>
+     * <li>Klammern → verwalten geschachtelte Ausdrücke</li>
      * </ul>
      * </p>
      *
@@ -100,20 +106,39 @@ public class ShuntingYard {
                     operatorStack.push(token);
                     break;
 
-                case LPAREN:
+                case LPARENNORMAL:
                     // Linke Klammern auf den Stack
                     operatorStack.push(token);
                     break;
 
-                case RPAREN:
+                case LPARENECKIG:
+                    operatorStack.push(token);
+                    break;
+
+                case RPARENNORMAL:
                     // Operatoren bis zur linken Klammer in die Ausgabe verschieben
-                    while (!operatorStack.isEmpty() && operatorStack.peek().getType() != Token.Type.LPAREN) {
+                    while (!operatorStack.isEmpty() && operatorStack.peek().getType() != Token.Type.LPARENNORMAL) {
                         output.add(operatorStack.pop());
                     }
 
                     // Fehler: keine passende '(' gefunden
-                    if (operatorStack.isEmpty() || operatorStack.peek().getType() != Token.Type.LPAREN) {
+                    if (operatorStack.isEmpty() || operatorStack.peek().getType() != Token.Type.LPARENNORMAL) {
                         throw new Exception("Mismatched parentheses: Missing '('");
+                    }
+
+                    // Entferne '(' vom Stack
+                    operatorStack.pop();
+                    break;
+
+                case RPARENECKIG:
+                    // Operatoren bis zur linken Klammer in die Ausgabe verschieben
+                    while (!operatorStack.isEmpty() && operatorStack.peek().getType() != Token.Type.LPARENECKIG) {
+                        output.add(operatorStack.pop());
+                    }
+
+                    // Fehler: keine passende '[' gefunden
+                    if (operatorStack.isEmpty() || operatorStack.peek().getType() != Token.Type.LPARENECKIG) {
+                        throw new Exception("Mismatched parentheses: Missing '['");
                     }
 
                     // Entferne '(' vom Stack
@@ -127,6 +152,15 @@ public class ShuntingYard {
         }
 
         // Alle verbleibenden Operatoren auf den Stack in die Ausgabe verschieben
+        while (!operatorStack.isEmpty()) {
+            Token token = operatorStack.pop();
+            if (token.getType() == Token.Type.LPARENNORMAL || token.getType() == Token.Type.RPARENNORMAL) {
+                // Fehler: verbleibende Klammern im Stack
+                throw new Exception("Mismatched parentheses: Missing ')'");
+            }
+            output.add(token);
+        }
+
         while (!operatorStack.isEmpty()) {
             Token token = operatorStack.pop();
             if (token.getType() == Token.Type.LPAREN || token.getType() == Token.Type.RPAREN) {
