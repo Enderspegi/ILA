@@ -16,7 +16,7 @@ public class Tokenizer {
         int i = 0;
 
         while (i < expression.length()) {
-            char c = expression.charAt(i);
+           char c = expression.charAt(i);
 
             if (Character.isWhitespace(c)) {
                 i++;
@@ -110,6 +110,8 @@ public class Tokenizer {
         if (tokens.isEmpty())
             return true; // Am Anfang des Ausdrucks
         Token prev = tokens.get(tokens.size() - 1);
-        return prev.getType() == Token.Type.OPERATOR || prev.getType() == Token.Type.LPARENNORMAL;
+        return prev.getType() == Token.Type.OPERATOR || prev.getType() == Token.Type.LPARENNORMAL || prev.getType() == Token.Type.LPARENECKIG;
     }
+
+    
 }
