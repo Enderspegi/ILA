@@ -76,10 +76,14 @@ public class Tokenizer {
                     type = Token.Type.OPERATOR; // Minus als Operator (wenn nicht Vorzeichen)
                     break;
                 case '(':
+                    type = Token.Type.RPARENNORMAL;
+                    break;
                 case '[':
                     type = Token.Type.LPARENECKIG;
                     break;
                 case ')':
+                    type = Token.Type.RPARENNORMAL;
+                    break;
                 case ']':
                     type = Token.Type.RPARENECKIG;
                     break;
@@ -99,11 +103,13 @@ public class Tokenizer {
 
     /**
      * Prüft, ob das vorherige Token ein Operator oder eine linke Klammer war.
-     * Wird verwendet, um zu entscheiden, ob ein '-' als Vorzeichen oder Operator zu behandeln ist.
+     * Wird verwendet, um zu entscheiden, ob ein '-' als Vorzeichen oder Operator zu
+     * behandeln ist.
      */
     private boolean isPreviousTokenOperatorOrLParen(List<Token> tokens) {
-        if (tokens.isEmpty()) return true; // Am Anfang des Ausdrucks
+        if (tokens.isEmpty())
+            return true; // Am Anfang des Ausdrucks
         Token prev = tokens.get(tokens.size() - 1);
-        return prev.getType() == Token.Type.OPERATOR || prev.getType() == Token.Type.LPAREN;
+        return prev.getType() == Token.Type.OPERATOR || prev.getType() == Token.Type.LPARENNORMAL;
     }
 }
