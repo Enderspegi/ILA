@@ -102,4 +102,4 @@ public class TokenTest {
         Token token = new Token(Token.Type.OPERATOR, "+");
         assertFalse(token.isSignedNegativeNumber(), "Sollte FALSE für '+' zurückgeben.");
     }
-}
+}// leere wie Sch
