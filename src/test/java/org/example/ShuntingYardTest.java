@@ -115,7 +115,7 @@ public class ShuntingYardTest {
     @Test
     void testParentheses_PriorityOverride() throws Exception {
         String[] values = {"(", "1", "+", "2", ")", "*", "3"};
-        Token.Type[] types = {Token.Type.LPAREN, Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.NUMBER, Token.Type.RPAREN, Token.Type.OPERATOR, Token.Type.NUMBER};
+        Token.Type[] types = {Token.Type.LPARENNORMAL, Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.NUMBER, Token.Type.RPARENNORMAL, Token.Type.OPERATOR, Token.Type.NUMBER};
         List<Token> tokens = createInfixTokens(values, types);
 
         List<Token> rpn = shuntingYard.convertToRPN(tokens);
@@ -129,7 +129,7 @@ public class ShuntingYardTest {
     @Test
     void testComplexExample() throws Exception {
         String[] values = {"3", "+", "4", "*", "2", "/", "(", "1", "-", "5", ")"};
-        Token.Type[] types = {Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.LPAREN, Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.NUMBER, Token.Type.RPAREN};
+        Token.Type[] types = {Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.LPARENNORMAL, Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.NUMBER, Token.Type.RPARENNORMAL};
         List<Token> tokens = createInfixTokens(values, types);
 
         List<Token> rpn = shuntingYard.convertToRPN(tokens);
@@ -147,7 +147,7 @@ public class ShuntingYardTest {
     @Test
     void testMismatchedParentheses_MissingRightParen() {
         String[] values = {"1", "+", "(", "2", "*", "3"};
-        Token.Type[] types = {Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.LPAREN, Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.NUMBER};
+        Token.Type[] types = {Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.LPARENNORMAL, Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.NUMBER};
         List<Token> tokens = createInfixTokens(values, types);
 
         Exception exception = assertThrows(Exception.class, () -> {
@@ -164,7 +164,7 @@ public class ShuntingYardTest {
     @Test
     void testMismatchedParentheses_MissingLeftParen() {
         String[] values = {"1", "+", "2", ")", "*", "3"};
-        Token.Type[] types = {Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.NUMBER, Token.Type.RPAREN, Token.Type.OPERATOR, Token.Type.NUMBER};
+        Token.Type[] types = {Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.NUMBER, Token.Type.RPARENNORMAL, Token.Type.OPERATOR, Token.Type.NUMBER};
         List<Token> tokens = createInfixTokens(values, types);
 
         Exception exception = assertThrows(Exception.class, () -> {
