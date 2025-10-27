@@ -39,8 +39,8 @@ public class TokenTest {
      */
     @Test
     void testTokenInitialization_Parenthesis() {
-        Token token = new Token(Token.Type.LPAREN, "(");
-        assertEquals(Token.Type.LPAREN, token.getType(), "Der Token-Typ sollte LPAREN sein.");
+        Token token = new Token(Token.Type.LPARENNORMAL, "(");
+        assertEquals(Token.Type.LPARENNORMAL, token.getType(), "Der Token-Typ sollte LPAREN sein.");
         assertEquals("(", token.getValue(), "Der Token-Wert sollte '(' sein.");
     }
     
