@@ -163,9 +163,9 @@ public class ShuntingYard {
 
         while (!operatorStack.isEmpty()) {
             Token token = operatorStack.pop();
-            if (token.getType() == Token.Type.LPAREN || token.getType() == Token.Type.RPAREN) {
+            if (token.getType() == Token.Type.LPARENECKIG || token.getType() == Token.Type.RPARENECKIG) {
                 // Fehler: verbleibende Klammern im Stack
-                throw new Exception("Mismatched parentheses: Missing ')'");
+                throw new Exception("Mismatched parentheses: Missing ']'");
             }
             output.add(token);
         }
