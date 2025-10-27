@@ -77,11 +77,11 @@ public class Tokenizer {
                     break;
                 case '(':
                 case '[':
-                    type = Token.Type.LPAREN;
+                    type = Token.Type.LPARENECKIG;
                     break;
                 case ')':
                 case ']':
-                    type = Token.Type.RPAREN;
+                    type = Token.Type.RPARENECKIG;
                     break;
             }
 
