@@ -69,6 +69,7 @@ public class Tokenizer {
                 case '+':
                 case '*':
                 case '/':
+                case ''
                     type = Token.Type.OPERATOR;
                     break;
                 case '-':
