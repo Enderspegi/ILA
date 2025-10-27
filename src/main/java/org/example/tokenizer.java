@@ -69,16 +69,18 @@ public class Tokenizer {
                 case '+':
                 case '*':
                 case '/':
-                case ''
+                case '^':
                     type = Token.Type.OPERATOR;
                     break;
                 case '-':
                     type = Token.Type.OPERATOR; // Minus als Operator (wenn nicht Vorzeichen)
                     break;
                 case '(':
+                case '[':
                     type = Token.Type.LPAREN;
                     break;
                 case ')':
+                case ']':
                     type = Token.Type.RPAREN;
                     break;
             }
