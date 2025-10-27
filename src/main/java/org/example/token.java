@@ -39,6 +39,8 @@ public class Token {
 
         RPARENECKIG,
 
+        SHIFT,
+
         /** Unbekanntes oder ungültiges Token */
         UNKNOWN
     }
