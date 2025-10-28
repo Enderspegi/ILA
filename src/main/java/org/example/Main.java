@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
         // Erstellung eines Stacks für String-Elemente
@@ -43,6 +45,44 @@ public class Main {
             stack.peek();
         } catch (IndexOutOfBoundsException e) {
             System.out.println("IndexOutOfBoundsException gefangen: " + e.getMessage()); // Ausgabe: Der Stack ist leer.
+        }
+
+        String expression = "3 + 4 * 2 / ( 1 - 5 )";
+        
+        System.out.println("Eingabe: " + expression);
+        System.out.println("------------------------------------");
+
+        try {
+            // 1. Tokenisierung
+            Tokenizer tokenizer = new Tokenizer();
+            List<Token> tokens = tokenizer.tokenize(expression);
+            
+            System.out.print("Ausgabe Token: [");
+            for (int i = 0; i < tokens.size(); i++) {
+                System.out.print(tokens.get(i).getValue());
+                if (i < tokens.size() - 1) {
+                    System.out.print(", ");
+                }
+            }
+            System.out.println("]");
+            
+            // 2. Umwandlung in RPN
+            ShuntingYard shuntingYard = new ShuntingYard();
+            List<Token> rpnTokens = shuntingYard.convertToRPN(tokens);
+            
+            System.out.print("Ausgabe RPN: ");
+            for (Token token : rpnTokens) {
+                System.out.print(token.getValue() + " ");
+            }
+            System.out.println();
+            
+            // Beispielausgaben:
+            // Eingabe: 3 + 4 * 2 / ( 1 - 5 )
+            // Ausgabe Token: [3, +, 4, *, 2, /, (, 1, -, 5, )]
+            // Ausgabe RPN: 3 4 2 * 1 5 - / + 
+            
+        } catch (Exception e) {
+            System.err.println("Fehler: " + e.getMessage());
         }
     }
 }
