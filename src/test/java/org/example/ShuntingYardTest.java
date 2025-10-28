@@ -190,4 +190,99 @@ public class ShuntingYardTest {
 
         assertTrue(exception.getMessage().contains("Invalid token encountered: $"), "Fehlermeldung sollte auf das ungültige Token hinweisen.");
     }
+
+    
+    // -------------------------------------------------------------------------
+    // 3. Tests für Exponentiation (Rechtsassoziativität)
+    // -------------------------------------------------------------------------
+
+    /**
+     * Prüft die Rechtsassoziativität der Exponentiation.
+     * 2 ^ 3 ^ 2 -> 2 3 2 ^ ^
+     */
+    @Test
+    void testRightAssociativity_Power() throws Exception {
+        String[] values = {"2", "^", "3", "^", "2"};
+        Token.Type[] types = {Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.NUMBER};
+        List<Token> tokens = createInfixTokens(values, types);
+
+        List<Token> rpn = shuntingYard.convertToRPN(tokens);
+        // Bei Rechtsassoziativität muss der rechte Operator zuerst in die Ausgabe
+        assertEquals("2 3 2 ^ ^", tokensToRpnString(rpn), "Exponentiation muss rechtsassoziativ sein.");
+    }
+
+    /**
+     * Prüft Exponentiation mit anderen Operatoren.
+     * 4 * 2 ^ 3 -> 4 2 3 ^ *
+     */
+    @Test
+    void testPrecedenceWithPower() throws Exception {
+        String[] values = {"4", "*", "2", "^", "3"};
+        Token.Type[] types = {Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.NUMBER};
+        List<Token> tokens = createInfixTokens(values, types);
+
+        List<Token> rpn = shuntingYard.convertToRPN(tokens);
+        // ^ hat höhere Priorität (3) als * (2)
+        assertEquals("4 2 3 ^ *", tokensToRpnString(rpn));
+    }
+    
+    // -------------------------------------------------------------------------
+    // 4. Tests für gemischte Klammertypen
+    // -------------------------------------------------------------------------
+
+    /**
+     * Prüft verschachtelte Klammern mit unterschiedlichen Typen.
+     * 3 + [ 4 * ( 2 - 1 ) ]
+     */
+    @Test
+    void testMixedParentheses() throws Exception {
+        String[] values = {"3", "+", "[", "4", "*", "(", "2", "-", "1", ")", "]"};
+        Token.Type[] types = {
+            Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.LPARENECKIG, Token.Type.NUMBER, 
+            Token.Type.OPERATOR, Token.Type.LPARENNORMAL, Token.Type.NUMBER, Token.Type.OPERATOR, 
+            Token.Type.NUMBER, Token.Type.RPARENNORMAL, Token.Type.RPARENECKIG
+        };
+        List<Token> tokens = createInfixTokens(values, types);
+
+        List<Token> rpn = shuntingYard.convertToRPN(tokens);
+        assertEquals("3 4 2 1 - * +", tokensToRpnString(rpn), "Muss innere Klammern zuerst verarbeiten.");
+    }
+    
+    // -------------------------------------------------------------------------
+    // 5. Fehlerfälle (Unbalancierte Klammern)
+    // -------------------------------------------------------------------------
+
+    /**
+     * Prüft auf fehlende schließende eckige Klammer.
+     * 1 + [ 2 * 3
+     */
+    @Test
+    void testMismatchedParentheses_MissingSquareRight() {
+        String[] values = {"1", "+", "[", "2", "*", "3"};
+        Token.Type[] types = {Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.LPARENECKIG, Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.NUMBER};
+        List<Token> tokens = createInfixTokens(values, types);
+
+        Exception exception = assertThrows(Exception.class, () -> {
+            shuntingYard.convertToRPN(tokens);
+        }, "Sollte eine Exception werfen, wenn ']' fehlt.");
+
+        assertTrue(exception.getMessage().contains("Missing ']'"), "Fehlermeldung sollte auf fehlende ']' hinweisen.");
+    }
+
+    /**
+     * Prüft auf fehlende öffnende eckige Klammer.
+     * 1 + 2 * 3 ]
+     */
+    @Test
+    void testMismatchedParentheses_MissingSquareLeft() {
+        String[] values = {"1", "+", "2", "*", "3", "]"};
+        Token.Type[] types = {Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.NUMBER, Token.Type.OPERATOR, Token.Type.NUMBER, Token.Type.RPARENECKIG};
+        List<Token> tokens = createInfixTokens(values, types);
+
+        Exception exception = assertThrows(Exception.class, () -> {
+            shuntingYard.convertToRPN(tokens);
+        }, "Sollte eine Exception werfen, wenn '[' fehlt.");
+
+        assertTrue(exception.getMessage().contains("Missing '['"), "Fehlermeldung sollte auf fehlende '[' hinweisen.");
+    }
 }

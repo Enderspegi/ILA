@@ -37,21 +37,18 @@ public class ShuntingYard {
     private int getPrecedence(String operator) {
         return PRECEDENCE.getOrDefault(operator, 0);
     }
-
-    /**
+/**
      * Prüft, ob ein Operator linksassoziativ ist.
-     *
-     * <p>
-     * In diesem Beispiel sind alle unterstützten Operatoren (+, -, *, /)
-     * linksassoziativ.
-     * </p>
+     * * <p> +, -, *, / sind linksassoziativ. ^ ist rechtsassoziativ. </p>
      *
      * @param operator der Operator
      * @return true, wenn linksassoziativ
      */
     private boolean isLeftAssociative(String operator) {
-        return PRECEDENCE.containsKey(operator); // alle definierten OPs sind linksassoziativ
+        // Alle OPs sind linksassoziativ, außer 'hoch' (^)
+        return !operator.equals("^"); 
     }
+
 
     /**
      *
