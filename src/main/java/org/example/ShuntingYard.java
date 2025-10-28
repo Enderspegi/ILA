@@ -37,18 +37,21 @@ public class ShuntingYard {
     private int getPrecedence(String operator) {
         return PRECEDENCE.getOrDefault(operator, 0);
     }
-/**
+
+    /**
      * Prüft, ob ein Operator linksassoziativ ist.
-     * * <p> +, -, *, / sind linksassoziativ. ^ ist rechtsassoziativ. </p>
+     * *
+     * <p>
+     * +, -, *, / sind linksassoziativ. ^ ist rechtsassoziativ.
+     * </p>
      *
      * @param operator der Operator
      * @return true, wenn linksassoziativ
      */
     private boolean isLeftAssociative(String operator) {
         // Alle OPs sind linksassoziativ, außer 'hoch' (^)
-        return !operator.equals("^"); 
+        return !operator.equals("^");
     }
-
 
     /**
      *
@@ -113,33 +116,53 @@ public class ShuntingYard {
                     break;
 
                 case RPARENNORMAL:
-                    // Operatoren bis zur linken Klammer in die Ausgabe verschieben
-                    while (!operatorStack.isEmpty() && operatorStack.peek().getType() != Token.Type.LPARENNORMAL) {
+                    // 1. Verschiebe Operatoren bis zur linken Klammer
+                    while (!operatorStack.isEmpty() && operatorStack.peek().getType() == Token.Type.OPERATOR) {
                         output.add(operatorStack.pop());
                     }
 
-                    // Fehler: keine passende '(' gefunden
-                    if (operatorStack.isEmpty() || operatorStack.peek().getType() != Token.Type.LPARENNORMAL) {
-                        throw new Exception("Mismatched parentheses: Missing '('");
+                    // 2. Prüfung: Stack leer? Oder falscher Klammertyp?
+                    if (operatorStack.isEmpty()) {
+                        throw new Exception("Mismatched parentheses: Missing '('"); // Stack leer, keine passende '('
+                                                                                    // gefunden
                     }
 
-                    // Entferne '(' vom Stack
-                    operatorStack.pop();
+                    Token top = operatorStack.peek();
+                    if (top.getType() == Token.Type.LPARENNORMAL) {
+                        // Korrekte Klammer gefunden
+                        operatorStack.pop();
+                    } else if (top.getType() == Token.Type.LPARENECKIG) {
+                        // Falscher Klammertyp gefunden! ([...))
+                        throw new Exception("Mismatched parentheses: Expected ']', found ')'");
+                    } else {
+                        // Sollte theoretisch nicht passieren (andere Fehler)
+                        throw new Exception("Internal Error during parenthesis matching.");
+                    }
                     break;
 
                 case RPARENECKIG:
-                    // Operatoren bis zur linken Klammer in die Ausgabe verschieben
-                    while (!operatorStack.isEmpty() && operatorStack.peek().getType() != Token.Type.LPARENECKIG) {
+                    // 1. Verschiebe Operatoren bis zur linken Klammer
+                    while (!operatorStack.isEmpty() && operatorStack.peek().getType() == Token.Type.OPERATOR) {
                         output.add(operatorStack.pop());
                     }
 
-                    // Fehler: keine passende '[' gefunden
-                    if (operatorStack.isEmpty() || operatorStack.peek().getType() != Token.Type.LPARENECKIG) {
-                        throw new Exception("Mismatched parentheses: Missing '['");
+                    // 2. Prüfung: Stack leer? Oder falscher Klammertyp?
+                    if (operatorStack.isEmpty()) {
+                        throw new Exception("Mismatched parentheses: Missing '['"); // Stack leer, keine passende '['
+                                                                                    // gefunden
                     }
 
-                    // Entferne '(' vom Stack
-                    operatorStack.pop();
+                    Token topToken2 = operatorStack.peek();
+                    if (topToken2.getType() == Token.Type.LPARENECKIG) {
+                        // Korrekte Klammer gefunden
+                        operatorStack.pop();
+                    } else if (topToken2.getType() == Token.Type.LPARENNORMAL) {
+                        // Falscher Klammertyp gefunden! ([...))
+                        throw new Exception("Mismatched parentheses: Expected ')', found ']'");
+                    } else {
+                        // Sollte theoretisch nicht passieren
+                        throw new Exception("Internal Error during parenthesis matching.");
+                    }
                     break;
 
                 case UNKNOWN:
@@ -147,26 +170,30 @@ public class ShuntingYard {
                     throw new Exception("Invalid token encountered: " + token.getValue());
             }
         }
-
         // Alle verbleibenden Operatoren auf den Stack in die Ausgabe verschieben
         while (!operatorStack.isEmpty()) {
             Token token = operatorStack.pop();
-            if (token.getType() == Token.Type.LPARENNORMAL || token.getType() == Token.Type.RPARENNORMAL) {
-                // Fehler: verbleibende Klammern im Stack
+
+            // Fehlerprüfung für offene Klammern, die im Stack verbleiben
+            if (token.getType() == Token.Type.LPARENNORMAL) {
+                // Offene runde Klammer im Stack -> fehlende schließende ')'
                 throw new Exception("Mismatched parentheses: Missing ')'");
             }
-            output.add(token);
-        }
-
-        while (!operatorStack.isEmpty()) {
-            Token token = operatorStack.pop();
-            if (token.getType() == Token.Type.LPARENECKIG || token.getType() == Token.Type.RPARENECKIG) {
-                // Fehler: verbleibende Klammern im Stack
+            if (token.getType() == Token.Type.LPARENECKIG) {
+                // Offene eckige Klammer im Stack -> fehlende schließende ']'
                 throw new Exception("Mismatched parentheses: Missing ']'");
             }
+
+            // Abschließende Klammern sollten hier nicht vorkommen,
+            // da sie bereits beim Lesen vom Stack entfernt werden.
+            if (token.getType() == Token.Type.RPARENNORMAL || token.getType() == Token.Type.RPARENECKIG) {
+                throw new Exception("Internal Error: Unexpected closing parenthesis in stack.");
+            }
+
             output.add(token);
         }
 
         return output;
+
     }
 }
