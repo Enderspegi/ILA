@@ -42,7 +42,7 @@ public class TokenTest {
     void testTokenInitialization_Operator2() {
         Token token = new Token(Token.Type.OPERATOR, "^");
         assertEquals(Token.Type.OPERATOR, token.getType(), "Der Token-Typ sollte OPERATOR sein.");
-        assertEquals("*", token.getValue(), "Der Token-Wert sollte '*' sein.");
+        assertEquals("^", token.getValue(), "Der Token-Wert sollte '^' sein.");
     }
     /**
      * Testet die korrekte Zuweisung und Rückgabe eines Klammer-Tokens.
@@ -59,7 +59,7 @@ public class TokenTest {
      */
     @Test
     void testTokenInitialization_Parenthesis2() {
-        Token token = new Token(Token.Type.LPARENNORMAL, "[");
+        Token token = new Token(Token.Type.LPARENECKIG, "[");
         assertEquals(Token.Type.LPARENECKIG, token.getType(), "Der Token-Typ sollte LPARENECKIG sein.");
         assertEquals("[", token.getValue(), "Der Token-Wert sollte '[' sein.");
     }

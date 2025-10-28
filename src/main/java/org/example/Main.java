@@ -47,7 +47,7 @@ public class Main {
             System.out.println("IndexOutOfBoundsException gefangen: " + e.getMessage()); // Ausgabe: Der Stack ist leer.
         }
 
-        String expression = "3 + 4 * 2 / ( 1 - 5 )";
+        String expression = "7+(3*3)/(4-3)^2";
         
         System.out.println("Eingabe: " + expression);
         System.out.println("------------------------------------");
